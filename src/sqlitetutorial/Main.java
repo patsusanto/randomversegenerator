@@ -21,14 +21,20 @@ public class Main {
             ResultSet rs = ps.executeQuery();
             ResultSetMetaData rsmd = rs.getMetaData();
             int columnsNumber = rsmd.getColumnCount();
+            String book = "";
+            int chapter = 0;
+            int verseNumber = 0;
+            String verse = "";
             while (rs.next()) {
-                for (int i = 1; i <= columnsNumber; i++) {
-                    if (i > 1) System.out.print(",  ");
-                    String columnValue = rs.getString(i);
-                    System.out.print(columnValue + " " + rsmd.getColumnName(i));
-                }
-                System.out.println("");
+                book = rs.getString("name");
+                chapter = rs.getInt("chapter");
+                verseNumber = rs.getInt("verse");
+                verse = rs.getString("text");
+
             }
+            String result = String.format("\"%s\" %s %d:%d", verse, book, chapter, verseNumber);
+            System.out.println(result);
+
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
@@ -37,11 +43,9 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        //ask for a verse
+        //get connection
         Connection con = ConnectionManager.getConnection();
 
-        //ask for new verse
-        System.out.println("Would you like to get a random bible verse");
         Main.randomVerse(con);
 
     }
