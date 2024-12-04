@@ -1,9 +1,6 @@
 package sqlitetutorial;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class Main {
     public static int randomNumberGenerator(int min, int max)
@@ -18,15 +15,19 @@ public class Main {
         int total_no_verses = 217714;
         int desired_id = randomNumberGenerator(0, total_no_verses);
         try {
-            String wanted_verse = "SELECT text FROM KJV_verses WHERE id = ?";
+            String wanted_verse = "SELECT name, chapter, verse, text FROM bible WHERE verse_id = ?";
             PreparedStatement ps = con.prepareStatement(wanted_verse);
             ps.setInt(1, desired_id);
             ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                System.out.println(rs.getString("text"));
-            }
-            else {
-                System.out.println("No verse found with ID: " + desired_id);
+            ResultSetMetaData rsmd = rs.getMetaData();
+            int columnsNumber = rsmd.getColumnCount();
+            while (rs.next()) {
+                for (int i = 1; i <= columnsNumber; i++) {
+                    if (i > 1) System.out.print(",  ");
+                    String columnValue = rs.getString(i);
+                    System.out.print(columnValue + " " + rsmd.getColumnName(i));
+                }
+                System.out.println("");
             }
         } catch (SQLException e) {
             System.err.println(e.getMessage());

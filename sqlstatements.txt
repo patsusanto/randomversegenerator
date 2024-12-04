@@ -1,3 +1,5 @@
+Connection URL: sqlite3 /mnt/c/sqlite/db/KJV.db
+
 Merging verse table and book table, so i know which book the verse comes from
 
 SELECT book.id, book.name, verses.id as verse_id, verses.chapter, verses.verse, verses.text
@@ -12,5 +14,6 @@ CREATE VIEW bible AS
 SELECT book.id, book.name, verses.id as verse_id, verses.chapter, verses.verse, verses.text
 FROM KJV_books as book
 INNER JOIN KJV_verses as verses
-ON book.id = verses.book_id
-LIMIT 10;
+ON book.id = verses.book_id;
+
+
